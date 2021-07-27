@@ -1,0 +1,7 @@
+---
+modules:
+  source: git@github.com:rafaelvelosoAZ/projects
+  branch: main
+  type: git
+  url: git@github.com:rafaelvelosoAZ/projects
+  sha: b3581ecf1730235fbcd705afae05e9d79dbd5c6c
