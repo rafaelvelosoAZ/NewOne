@@ -29,6 +29,7 @@ stages:
       # Step 1: run the Checkov Static Code Analysis
       
       - script: docker run --tty --volume $(System.DefaultWorkingDirectory):/tf bridgecrew/checkov --directory /tf --output junitxml > $(System.DefaultWorkingDirectory)/Checkov-Report.xml
+      - bash: $(terraformWorkingDirectory)/checkov.sh $(terraformWorkingDirectory) 
         displayName: Checkov Static Code Analysis
       # Step 2: install Terraform on the Azure Pipelines agent
       - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
