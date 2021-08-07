@@ -58,10 +58,12 @@ stages:
               inputs:
                   provider: 'azurerm'
                   command: 'plan'
+                  workingDirectory: '$(System.DefaultWorkingDirectory)/projects/contoso/app/stacks/backend'
                   environmentServiceNameAzureRM: 'devopstf'
             - task: TerraformTaskV2@2
               displayName: 'apply'
               inputs:
                   provider: 'azurerm'
                   command: 'apply'
+                  workingDirectory: '$(System.DefaultWorkingDirectory)/projects/contoso/app/stacks/backend'
                   environmentServiceNameAzureRM: 'devopstf'
