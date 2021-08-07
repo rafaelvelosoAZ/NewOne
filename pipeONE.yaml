@@ -48,7 +48,6 @@ stages:
               inputs:
                 provider: 'azurerm'
                 command: 'init'
-                workingDirectory: '$(System.DefaultWorkingDirectory)/projects/contoso/app/stacks/backend'
                 backendServiceArm: 'devopstf'
                 backendAzureRmResourceGroupName: 'terraform-resources-eastus'
                 backendAzureRmStorageAccountName: 'ts6b0eeastusdev'
