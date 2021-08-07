@@ -1,0 +1,67 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+  
+stages:
+- stage: validate
+  jobs:
+  - job: validate
+    continueOnError: false
+    steps:
+    - task: TerraformInstaller@0
+      displayName: 'install'
+      inputs:
+        terraformVersion: '1.0.3'
+    - task: TerraformTaskV2@2
+      displayName: init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'devopstf'
+        backendAzureRmResourceGroupName: 'terraform-resources-eastus'
+        backendAzureRmStorageAccountName: 'ts6b0eeastusdev'
+        backendAzureRmContainerName: 'terraform-state'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTaskV2@2
+      displayName: validate
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+- stage: deploy
+  jobs:
+    - deployment: deploy_terraform
+      continueOnError: false
+      environment: 'dev'
+      strategy:
+       runOnce:
+         deploy:
+          steps:
+            - checkout: self
+            - task: TerraformInstaller@0
+              displayName: 'install'
+              inputs:
+                terraformVersion: '1.0.3'
+            - task: TerraformTaskV2@2
+              displayName: 'init'
+              inputs:
+                provider: 'azurerm'
+                command: 'init'
+                backendServiceArm: 'devopstf'
+                backendAzureRmResourceGroupName: 'terraform-resources-eastus'
+                backendAzureRmStorageAccountName: 'ts6b0eeastusdev'
+                backendAzureRmContainerName: 'terraform-state'
+                backendAzureRmKey: 'terraform.tfstate'
+            - task: TerraformTaskV2@2
+              displayName: 'plan'
+              inputs:
+                  provider: 'azurerm'
+                  command: 'plan'
+                  environmentServiceNameAzureRM: 'devopstf'
+            - task: TerraformTaskV2@2
+              displayName: 'apply'
+              inputs:
+                  provider: 'azurerm'
+                  command: 'apply'
+                  environmentServiceNameAzureRM: 'devopstf'
