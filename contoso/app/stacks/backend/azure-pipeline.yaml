@@ -173,7 +173,7 @@ stages:
     - task: ManualValidation@0
       timeoutInMinutes: 60
       inputs:
-        notifyUsers: 'ned@nedinthecloud.com'
+        notifyUsers: 'rafa.v_s@hotmail.com'
         instructions: 'Review the plan in the next hour'
 
 - stage: Apply
