@@ -27,8 +27,8 @@ stages:
     # Azure Key Vault
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
-      inputs:
-        ConnectedServiceName: $(service-account)
+      inputs:       
+        connectedServiceName: $(service-account)
         keyVaultName: $(key-vault-name)
         secretsFilter: '*'
         runAsPreJob: false # Azure DevOps Services only
@@ -104,7 +104,7 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-        ConnectedServiceName: $(service-account)
+        connectedServiceName: $(service-account)
         keyVaultName: $(key-vault-name)
         secretsFilter: '*'
         runAsPreJob: false # Azure DevOps Services only
@@ -188,7 +188,7 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-        ConnectedServiceName: $(service-account)
+        connectedServiceName: $(service-account)
         keyVaultName: $(key-vault-name)
         secretsFilter: '*'
         runAsPreJob: false # Azure DevOps Services only
