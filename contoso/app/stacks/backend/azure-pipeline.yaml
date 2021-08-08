@@ -28,10 +28,10 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-        ConnectedServiceName: '$(key-vault-sp)'
-        keyVaultName: '$(key-vault-name)'
-        secretsFilter: '*'
-        runAsPreJob: false # Azure DevOps Services only
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraspacekeys'
+        SecretsFilter: '*'
+        RunAsPreJob: false
     
     # Init
     - task: TerraformCLI@0
@@ -104,10 +104,10 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-        ConnectedServiceName: $(key-vault-sp)
-        keyVaultName: $(key-vault-name)
-        secretsFilter: '*'
-        runAsPreJob: false # Azure DevOps Services only
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraspacekeys'
+        SecretsFilter: '*'
+        RunAsPreJob: false
     
   
     # Init
@@ -189,10 +189,10 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-        ConnectedServiceName: $(key-vault-sp)
-        keyVaultName: $(key-vault-name)
-        secretsFilter: '*'
-        runAsPreJob: false # Azure DevOps Services only
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraspacekeys'
+        SecretsFilter: '*'
+        RunAsPreJob: false
 
   # Init
     - task: TerraformCLI@0
