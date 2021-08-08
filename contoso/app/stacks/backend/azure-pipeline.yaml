@@ -28,7 +28,7 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-          azureSubscription: 'terraform-basic-testing-azure-connection'
+          ConnectedServiceName: 'terraform-basic-testing-azure-connection'
           KeyVaultName: 'terraspacekeys'
           SecretsFilter: '*'
           RunAsPreJob: false
@@ -104,7 +104,7 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-          azureSubscription: 'terraform-basic-testing-azure-connection'
+          ConnectedServiceName: 'terraform-basic-testing-azure-connection'
           KeyVaultName: 'terraspacekeys'
           SecretsFilter: '*'
           RunAsPreJob: false
@@ -188,7 +188,7 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-          azureSubscription: 'terraform-basic-testing-azure-connection'
+          ConnectedServiceName: 'terraform-basic-testing-azure-connection'
           KeyVaultName: 'terraspacekeys'
           SecretsFilter: '*'
           RunAsPreJob: false
