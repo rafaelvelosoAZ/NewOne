@@ -41,7 +41,12 @@ stages:
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: 'terraform init -backend-config=contoso/config/terraform/provider.tf -backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
+        commandOptions: 'terraform init -backend-config=contoso/config/terraform/provider.tf'
+        backendServiceArm: 'service-key-vault'
+        backendAzureRmResourceGroupName: 'terraform-resources-eastus'
+        backendAzureRmStorageAccountName: $(storageaccount-dev-name)
+        backendAzureRmContainerName: $(container-name)
+        backendAzureRmKey: $(key)
         backendType: 'selfConfigured'
 
   # Validate
@@ -118,7 +123,12 @@ stages:
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: 'terraform init -backend-config=contoso/config/terraform/provider.tf -backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
+        commandOptions: 'terraform init -backend-config=contoso/config/terraform/provider.tf'
+        backendServiceArm: 'service-key-vault'
+        backendAzureRmResourceGroupName: 'terraform-resources-eastus'
+        backendAzureRmStorageAccountName: $(storageaccount-dev-name)
+        backendAzureRmContainerName: $(container-name)
+        backendAzureRmKey: $(key)
         backendType: 'selfConfigured'
 
   # Plan
@@ -202,7 +212,12 @@ stages:
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: 'terraform init -backend-config=contoso/config/terraform/provider.tf -backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
+        commandOptions: 'terraform init -backend-config=contoso/config/terraform/provider.tf'
+        backendServiceArm: 'service-key-vault'
+        backendAzureRmResourceGroupName: 'terraform-resources-eastus'
+        backendAzureRmStorageAccountName: $(storageaccount-dev-name)
+        backendAzureRmContainerName: $(container-name)
+        backendAzureRmKey: $(key)
         backendType: 'selfConfigured'
 
   # Apply
