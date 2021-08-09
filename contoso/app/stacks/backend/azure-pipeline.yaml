@@ -13,7 +13,7 @@ trigger:
 
 stages:
 - stage: Install Terraspace
-  displayName:Terraspace
+  displayName: Terraspace
   jobs:
   - job: validate
     pool:
@@ -22,7 +22,7 @@ stages:
     # Install terraspace
     - bash: gem install terraspace
       displayName: 'Install terraspace'
-      name:'Install terraspace'
+      name: 'Install_terraspace'
 
 - stage: Validate
   displayName: Validate
