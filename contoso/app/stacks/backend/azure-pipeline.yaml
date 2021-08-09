@@ -1,7 +1,7 @@
 # Azure DevOps pipeline for Azure deployment
 
 variables:
-- group: terraform-tuesdays
+- group: terraspacekeys
 
 trigger:
   branches:
@@ -28,20 +28,20 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-        ConnectedServiceName: $(service_name)
-        keyVaultName: $(key_vault_name)
-        secretsFilter: '*'
-        runAsPreJob: false # Azure DevOps Services only
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraspacekeys'
+        SecretsFilter: '*'
+        RunAsPreJob: false
     
     # Init
     - task: TerraformCLI@0
       displayName: Initialize Terraform
       env:
-        ARM_SAS_TOKEN: $(sas-token)
+        ARM_SAS_TOKEN: $(sas-token-dev)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
         backendType: 'selfConfigured'
 
   # Validate
@@ -104,10 +104,11 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-        ConnectedServiceName: $(service_name)
-        keyVaultName: $(key_vault_name)
-        secretsFilter: '*'
-        runAsPreJob: false # Azure DevOps Services only
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraspacekeys'
+        SecretsFilter: '*'
+        RunAsPreJob: false
+    
   
     # Init
     - task: TerraformCLI@0
@@ -117,18 +118,18 @@ stages:
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
         backendType: 'selfConfigured'
 
   # Plan
     - task: TerraformCLI@0
       displayName: Plan Terraform Deployment
       env:
-        ARM_SAS_TOKEN: $(sas-token)
-        ARM_CLIENT_ID: $(az-client-id)
-        ARM_CLIENT_SECRET: $(az-client-secret)
-        ARM_SUBSCRIPTION_ID: $(az-subscription)
-        ARM_TENANT_ID: $(az-tenant)
+        ARM_SAS_TOKEN: $(sas-token-dev)
+        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
+        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
+        ARM_SUBSCRIPTION_ID: $(ARM-SUBSCRIPTION-ID)
+        ARM_TENANT_ID: $(ARM-TENANT-ID)
       inputs:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
@@ -144,11 +145,11 @@ stages:
       displayName: 'Verify plan with Checkov'
       name: 'checkov_plan_check'
       env:
-        ARM_SAS_TOKEN: $(sas-token)
-        ARM_CLIENT_ID: $(az-client-id)
-        ARM_CLIENT_SECRET: $(az-client-secret)
-        ARM_SUBSCRIPTION_ID: $(az-subscription)
-        ARM_TENANT_ID: $(az-tenant)
+        ARM_SAS_TOKEN: $(sas-token-dev)
+        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
+        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
+        ARM_SUBSCRIPTION_ID: $(ARM-SUBSCRIPTION-ID)
+        ARM_TENANT_ID: $(ARM-TENANT-ID)
   # Publish test results for plan
     - task: PublishTestResults@2
       displayName: Publish Checkov Plan Test Results
@@ -188,31 +189,31 @@ stages:
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
       inputs:
-        ConnectedServiceName: $(service_name)
-        keyVaultName: $(key_vault_name)
-        secretsFilter: '*'
-        runAsPreJob: false # Azure DevOps Services only
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraspacekeys'
+        SecretsFilter: '*'
+        RunAsPreJob: false
 
   # Init
     - task: TerraformCLI@0
       displayName: Initialize Terraform
       env:
-        ARM_SAS_TOKEN: $(sas-token)
+        ARM_SAS_TOKEN: $(sas-token-dev)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
         backendType: 'selfConfigured'
 
   # Apply
     - task: TerraformCLI@0
       displayName: Apply Terraform Deployment
       env:
-        ARM_SAS_TOKEN: $(sas-token)
-        ARM_CLIENT_ID: $(az-client-id)
-        ARM_CLIENT_SECRET: $(az-client-secret)
-        ARM_SUBSCRIPTION_ID: $(az-subscription)
-        ARM_TENANT_ID: $(az-tenant)
+        ARM_SAS_TOKEN: $(sas-token-dev)
+        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
+        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
+        ARM_SUBSCRIPTION_ID: $(ARM-SUBSCRIPTION-ID)
+        ARM_TENANT_ID: $(ARM-TENANT-ID)
       inputs:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
