@@ -39,15 +39,10 @@ stages:
       env:
         ARM_SAS_TOKEN: $(sas-token-dev)
       inputs:
-        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: 'terraform init'
-        backendServiceArm: 'service-key-vault'
-        backendAzureRmResourceGroupName: 'terraform-resources-eastus'
-        backendAzureRmStorageAccountName: $(storageaccount-dev-name)
-        backendAzureRmContainerName: $(container-name)
-        backendAzureRmKey: $(key)
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
+        backendType: 'selfConfigured'
 
   # Validate
     - task: TerraformCLI@0
@@ -121,15 +116,10 @@ stages:
       env:
         ARM_SAS_TOKEN: $(sas-token)
       inputs:
-        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: 'terraform init'
-        backendServiceArm: 'service-key-vault'
-        backendAzureRmResourceGroupName: 'terraform-resources-eastus'
-        backendAzureRmStorageAccountName: $(storageaccount-dev-name)
-        backendAzureRmContainerName: $(container-name)
-        backendAzureRmKey: $(key)
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
+        backendType: 'selfConfigured'
 
 
   # Plan
@@ -144,7 +134,7 @@ stages:
       inputs:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: '-out=$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend/main.tfplan'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key) -out=$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend/main.tfplan'
         publishPlanResults: 'Terraform Plan'
 
   # Verify plan with Checkov
@@ -211,15 +201,10 @@ stages:
       env:
         ARM_SAS_TOKEN: $(sas-token-dev)
       inputs:
-        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: 'terraform init'
-        backendServiceArm: 'service-key-vault'
-        backendAzureRmResourceGroupName: 'terraform-resources-eastus'
-        backendAzureRmStorageAccountName: $(storageaccount-dev-name)
-        backendAzureRmContainerName: $(container-name)
-        backendAzureRmKey: $(key)
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
+        backendType: 'selfConfigured'
 
   # Apply
     - task: TerraformCLI@0
@@ -233,4 +218,4 @@ stages:
       inputs:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: '-auto-approve'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key) -auto-approve'
