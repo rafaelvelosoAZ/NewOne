@@ -20,7 +20,7 @@ stages:
       vmImage: ubuntu-latest
     steps:
     # Install terraspace
-    - bash: gem install terraspace
+    - bash: sudo gem install terraspace
       displayName: 'Install terraspace'
       name: 'Install_terraspace'
 
