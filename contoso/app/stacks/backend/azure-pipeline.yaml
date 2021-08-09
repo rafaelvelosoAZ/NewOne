@@ -12,6 +12,18 @@ trigger:
     - contoso/app/stacks/backend
 
 stages:
+- stage: Install Terraspace
+  displayName:Terraspace
+  jobs:
+  - job: validate
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    # Install terraspace
+    - bash: gem install terraspace
+      displayName: 'Install terraspace'
+      name:'Install terraspace'
+
 - stage: Validate
   displayName: Validate
   jobs:
@@ -23,7 +35,6 @@ stages:
     - bash: pip3 install checkov
       displayName: 'Install checkov'
       name: 'install_checkov'
-
     # Azure Key Vault
     # Download Azure Key Vault secrets
     - task: AzureKeyVault@1
@@ -92,7 +103,7 @@ stages:
         testRunTitle: Checkov Root Scan
         failTaskOnFailedTests: false
         publishRunAttachments: true
-    
+
 - stage: Plan
   displayName: Plan
   jobs:
@@ -122,8 +133,8 @@ stages:
         ARM_SAS_TOKEN: $(sas-token)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: 'terraform init -backend-config=contoso/config/terraform/provider.tf'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/contoso'
+        commandOptions: 'terraspace stack backend'
         backendServiceArm: 'service-key-vault'
         backendAzureRmResourceGroupName: 'terraform-resources-eastus'
         backendAzureRmStorageAccountName: $(storageaccount-dev-name)
