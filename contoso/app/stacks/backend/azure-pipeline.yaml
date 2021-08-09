@@ -134,7 +134,7 @@ stages:
       inputs:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key) -out=$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend/main.tfplan'
+        commandOptions: '-out=$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend/main.tfplan'
         publishPlanResults: 'Terraform Plan'
 
   # Verify plan with Checkov
