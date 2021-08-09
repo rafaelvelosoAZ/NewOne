@@ -12,7 +12,7 @@ trigger:
     - contoso/app/stacks/backend
 
 stages:
-- stage: Install Terraspace
+- stage: Install_Terraspace
   displayName: Terraspace
   jobs:
   - job: validate
