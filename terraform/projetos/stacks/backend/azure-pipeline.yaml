@@ -6,7 +6,7 @@ variables:
 trigger:
   branches:
     include:
-    - develop
+    - newOne
   paths:
     include:
     - terraform/projetos/stacks/backend
