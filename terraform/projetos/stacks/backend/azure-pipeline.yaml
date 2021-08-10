@@ -38,16 +38,15 @@ stages:
       displayName: Initialize Terraform
       env:
         ARM_SAS_TOKEN: $(sas-terraform)
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      env:
+        ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
-        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        backendServiceArm: 'Visual Studio Enterprise Subscription(1)(27879557-aacc-4cbf-b226-16d05e5c026b)'
-        backendAzureRmResourceGroupName: 'terraform-new-one'
-        backendAzureRmStorageAccountName: 'tfnewone'
-        backendAzureRmContainerName: 'terraform-state'
-        backendAzureRmKey: 'terraform.tfstate'
-
+        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
+        backendType: 'azurerm'
   # Validate
     - task: TerraformCLI@0
       displayName: Validate Config
@@ -118,16 +117,12 @@ stages:
     - task: TerraformCLI@0
       displayName: Initialize Terraform
       env:
-        ARM_SAS_TOKEN: $(sas-token)
+        ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
-        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        backendServiceArm: 'Visual Studio Enterprise Subscription(1)(27879557-aacc-4cbf-b226-16d05e5c026b)'
-        backendAzureRmResourceGroupName: 'terraform-new-one'
-        backendAzureRmStorageAccountName: 'tfnewone'
-        backendAzureRmContainerName: 'terraform-state'
-        backendAzureRmKey: 'terraform.tfstate'
+        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
+        backendType: 'azurerm'
 
 
   # Plan
@@ -209,14 +204,10 @@ stages:
       env:
         ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
-        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        backendServiceArm: 'Visual Studio Enterprise Subscription(1)(27879557-aacc-4cbf-b226-16d05e5c026b)'
-        backendAzureRmResourceGroupName: 'terraform-new-one'
-        backendAzureRmStorageAccountName: 'tfnewone'
-        backendAzureRmContainerName: 'terraform-state'
-        backendAzureRmKey: 'terraform.tfstate'
+        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
+        backendType: 'azurerm'
 
   # Apply
     - task: TerraformCLI@0
