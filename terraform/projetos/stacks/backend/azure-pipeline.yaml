@@ -46,7 +46,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
         commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
-        backendType: 'azurerm'
+        backendType: 'selfConfigured'
   # Validate
     - task: TerraformCLI@0
       displayName: Validate Config
@@ -122,7 +122,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
         commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
-        backendType: 'azurerm'
+        backendType: 'selfConfigured'
 
 
   # Plan
@@ -207,7 +207,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
         commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
-        backendType: 'azurerm'
+        backendType: 'selfConfigured'
 
   # Apply
     - task: TerraformCLI@0
