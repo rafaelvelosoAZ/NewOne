@@ -41,9 +41,14 @@ stages:
         ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
-        backendType: 'selfConfigured'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
+        backendType: 'azurerm'
+        backendServiceArm: 'service-key-vault'
+        backendAzureRmResourceGroupName: 'terraform-new-one'
+        backendAzureRmStorageAccountName: 'tfnewone'
+        backendAzureRmContainerName: 'terraform-state'
+        backendAzureRmKey: 'terraform.tfstate'
+        allowTelemetryCollection: true
 
   # Validate
     - task: TerraformCLI@0
@@ -118,9 +123,14 @@ stages:
         ARM_SAS_TOKEN: $(sas-token)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
-        backendType: 'selfConfigured'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
+        backendType: 'azurerm'
+        backendServiceArm: 'service-key-vault'
+        backendAzureRmResourceGroupName: 'terraform-new-one'
+        backendAzureRmStorageAccountName: 'tfnewone'
+        backendAzureRmContainerName: 'terraform-state'
+        backendAzureRmKey: 'terraform.tfstate'
+        allowTelemetryCollection: true
 
 
   # Plan
@@ -203,9 +213,14 @@ stages:
         ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
-        backendType: 'selfConfigured'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
+        backendType: 'azurerm'
+        backendServiceArm: 'service-key-vault'
+        backendAzureRmResourceGroupName: 'terraform-new-one'
+        backendAzureRmStorageAccountName: 'tfnewone'
+        backendAzureRmContainerName: 'terraform-state'
+        backendAzureRmKey: 'terraform.tfstate'
+        allowTelemetryCollection: true
 
   # Apply
     - task: TerraformCLI@0
