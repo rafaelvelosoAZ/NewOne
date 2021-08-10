@@ -41,7 +41,7 @@ stages:
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one-new-one) -backend-config=key-new-one=$(key-new-one-new-one)'
+        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key-new-one=$(key-new-one)'
         backendType: 'selfConfigured'
 
   # Validate
