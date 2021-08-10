@@ -218,4 +218,4 @@ stages:
       inputs:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key) -auto-approve'
+        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key) -auto-approve'
