@@ -115,7 +115,7 @@ stages:
     - task: TerraformCLI@0
       displayName: Initialize Terraform
       env:
-        ARM_SAS_TOKEN: $(sas-terraform)
+        ARM_SAS_TOKEN: $(sas-token)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
