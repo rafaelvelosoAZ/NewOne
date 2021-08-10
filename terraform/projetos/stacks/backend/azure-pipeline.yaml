@@ -28,8 +28,8 @@ stages:
     # Download Azure key-new-one Vault secrets
     - task: AzurekeyVault@1
       inputs:
-        ConnectedServiceName: $(service_name)
-        KeyVaultName: $(key_vault_name)
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraform-keys-tf'
         SecretsFilter: '*'
         RunAsPreJob: false
     
@@ -104,8 +104,8 @@ stages:
     # Download Azure key-new-one Vault secrets
     - task: AzurekeyVault@1
       inputs:
-        ConnectedServiceName: $(service-name)
-        KeyVaultName: $(key-vault-name)
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraform-keys-tf'
         SecretsFilter: '*'
         RunAsPreJob: false
   
@@ -189,8 +189,8 @@ stages:
     # Download Azure key-new-one Vault secrets
     - task: AzurekeyVault@1
       inputs:
-        ConnectedServiceName: $(service_name)
-        KeyVaultName: $(key_vault_name)
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraform-keys-tf'
         SecretsFilter: '*'
         RunAsPreJob: false
 
