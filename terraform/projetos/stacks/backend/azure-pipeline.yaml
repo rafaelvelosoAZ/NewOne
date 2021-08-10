@@ -41,7 +41,7 @@ stages:
         ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
         backendType: 'azurerm'
         backendServiceArm: 'service-key-vault'
         backendAzureRmResourceGroupName: 'terraform-new-one'
@@ -123,7 +123,7 @@ stages:
         ARM_SAS_TOKEN: $(sas-token)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
         backendType: 'azurerm'
         backendServiceArm: 'service-key-vault'
         backendAzureRmResourceGroupName: 'terraform-new-one'
@@ -213,7 +213,7 @@ stages:
         ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/contoso/app/stacks/backend'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
         backendType: 'azurerm'
         backendServiceArm: 'service-key-vault'
         backendAzureRmResourceGroupName: 'terraform-new-one'
