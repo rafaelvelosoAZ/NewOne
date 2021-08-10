@@ -1,6 +1,5 @@
 # Azure DevOps pipeline for Azure deployment
 
-
 variables:
 - group: terraform-keys-tf-new-one
 
@@ -39,12 +38,15 @@ stages:
       displayName: Initialize Terraform
       env:
         ARM_SAS_TOKEN: $(sas-terraform)
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      env:
+        ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
         commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key-new-one)'
         backendType: 'selfConfigured'
-
   # Validate
     - task: TerraformCLI@0
       displayName: Validate Config
@@ -115,7 +117,7 @@ stages:
     - task: TerraformCLI@0
       displayName: Initialize Terraform
       env:
-        ARM_SAS_TOKEN: $(sas-token)
+        ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
