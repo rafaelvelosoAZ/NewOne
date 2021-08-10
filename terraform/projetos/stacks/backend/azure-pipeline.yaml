@@ -1,6 +1,5 @@
 # Azure DevOps pipeline for Azure deployment
 
-
 variables:
 - group: terraform-keys-tf-new-one
 
@@ -40,15 +39,14 @@ stages:
       env:
         ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
+        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        backendType: 'azurerm'
-        backendServiceArm: 'service-key-vault'
+        backendServiceArm: 'Visual Studio Enterprise Subscription(1)(27879557-aacc-4cbf-b226-16d05e5c026b)'
         backendAzureRmResourceGroupName: 'terraform-new-one'
         backendAzureRmStorageAccountName: 'tfnewone'
         backendAzureRmContainerName: 'terraform-state'
         backendAzureRmKey: 'terraform.tfstate'
-        allowTelemetryCollection: true
 
   # Validate
     - task: TerraformCLI@0
@@ -122,15 +120,14 @@ stages:
       env:
         ARM_SAS_TOKEN: $(sas-token)
       inputs:
+        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        backendType: 'azurerm'
-        backendServiceArm: 'service-key-vault'
+        backendServiceArm: 'Visual Studio Enterprise Subscription(1)(27879557-aacc-4cbf-b226-16d05e5c026b)'
         backendAzureRmResourceGroupName: 'terraform-new-one'
         backendAzureRmStorageAccountName: 'tfnewone'
         backendAzureRmContainerName: 'terraform-state'
         backendAzureRmKey: 'terraform.tfstate'
-        allowTelemetryCollection: true
 
 
   # Plan
@@ -212,15 +209,14 @@ stages:
       env:
         ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
+        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        backendType: 'azurerm'
-        backendServiceArm: 'service-key-vault'
+        backendServiceArm: 'Visual Studio Enterprise Subscription(1)(27879557-aacc-4cbf-b226-16d05e5c026b)'
         backendAzureRmResourceGroupName: 'terraform-new-one'
         backendAzureRmStorageAccountName: 'tfnewone'
         backendAzureRmContainerName: 'terraform-state'
         backendAzureRmKey: 'terraform.tfstate'
-        allowTelemetryCollection: true
 
   # Apply
     - task: TerraformCLI@0
