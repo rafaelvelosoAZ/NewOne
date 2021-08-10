@@ -24,12 +24,12 @@ stages:
       displayName: 'Install checkov'
       name: 'install_checkov'
 
-    # Azure Key Vault
-    # Download Azure Key Vault secrets
-    - task: AzureKeyVault@1
+    # Azure key-new-one Vault
+    # Download Azure key-new-one Vault secrets
+    - task: AzurekeyVault@1
       inputs:
-        azureSubscription: 'service-key-vault'
-        KeyVaultName: 'terraform-keys-tf'
+        ConnectedServiceName: $(service_name)
+        KeyVaultName: $(key_vault_name)
         SecretsFilter: '*'
         RunAsPreJob: false
     
@@ -38,16 +38,12 @@ stages:
       displayName: Initialize Terraform
       env:
         ARM_SAS_TOKEN: $(sas-terraform)
-    - task: TerraformTaskV2@2
       inputs:
-        provider: 'azurerm'
         command: 'init'
-        workingDirectory: '''$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'''
-        backendServiceArm: 'service-key-vault'
-        backendAzureRmResourceGroupName: 'terraform-new-one'
-        backendAzureRmStorageAccountName: 'tfnewone'
-        backendAzureRmContainerName: 'terraform-state'
-        backendAzureRmKey: 'terraform.tfstate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one-new-one) -backend-config=key-new-one=$(key-new-one-new-one)'
+        backendType: 'selfConfigured'
+
   # Validate
     - task: TerraformCLI@0
       displayName: Validate Config
@@ -104,27 +100,25 @@ stages:
       displayName: 'Install checkov'
       name: 'install_checkov'
 
-    # Azure Key Vault
-    # Download Azure Key Vault secrets
-    - task: AzureKeyVault@1
+    # Azure key-new-one Vault
+    # Download Azure key-new-one Vault secrets
+    - task: AzurekeyVault@1
       inputs:
-        azureSubscription: 'service-key-vault'
-        KeyVaultName: 'terraform-keys-tf'
+        ConnectedServiceName: $(service-name)
+        KeyVaultName: $(key-vault-name)
         SecretsFilter: '*'
         RunAsPreJob: false
-    
   
     # Init
-    - task: TerraformTaskV2@2
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      env:
+        ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
-        provider: 'azurerm'
         command: 'init'
-        workingDirectory: '''$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'''
-        backendServiceArm: 'service-key-vault'
-        backendAzureRmResourceGroupName: 'terraform-new-one'
-        backendAzureRmStorageAccountName: 'tfnewone'
-        backendAzureRmContainerName: 'terraform-state'
-        backendAzureRmKey: 'terraform.tfstate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key-new-one=$(key-new-one)'
+        backendType: 'selfConfigured'
 
 
   # Plan
@@ -144,7 +138,7 @@ stages:
 
   # Verify plan with Checkov
     - bash: |
-        cd $(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend
+        cd $(System.DefaultWorkingDirectory)/contoso/app/stacks/backend
         ls
         terraform show -json main.tfplan > $(System.DefaultWorkingDirectory)/main.json
         checkov -f $(System.DefaultWorkingDirectory)/main.json -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Plan-Report.xml
@@ -191,26 +185,25 @@ stages:
       vmImage: ubuntu-latest
     steps:
 
-    # Azure Key Vault
-    # Download Azure Key Vault secrets
-    - task: AzureKeyVault@1
+    # Azure key-new-one Vault
+    # Download Azure key-new-one Vault secrets
+    - task: AzurekeyVault@1
       inputs:
-        azureSubscription: 'service-key-vault'
-        KeyVaultName: 'terraform-keys-tf'
+        ConnectedServiceName: $(service_name)
+        KeyVaultName: $(key_vault_name)
         SecretsFilter: '*'
         RunAsPreJob: false
 
   # Init
-    - task: TerraformTaskV2@2
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      env:
+        ARM_SAS_TOKEN: $(sas-terraform)
       inputs:
-        provider: 'azurerm'
         command: 'init'
-        workingDirectory: '''$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'''
-        backendServiceArm: 'service-key-vault'
-        backendAzureRmResourceGroupName: 'terraform-new-one'
-        backendAzureRmStorageAccountName: 'tfnewone'
-        backendAzureRmContainerName: 'terraform-state'
-        backendAzureRmKey: 'terraform.tfstate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key-new-one=$(key-new-one)'
+        backendType: 'selfConfigured'
 
   # Apply
     - task: TerraformCLI@0
@@ -224,4 +217,4 @@ stages:
       inputs:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key=$(key) -auto-approve'
+        commandOptions: '-backend-config=storage_account_name=$(stg-new-one) -backend-config=container_name=$(container-name-new-one) -backend-config=key-new-one=$(key-new-one) -auto-approve'
