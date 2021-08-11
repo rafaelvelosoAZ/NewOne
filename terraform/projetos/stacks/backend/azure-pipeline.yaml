@@ -1,12 +1,12 @@
 # Azure DevOps pipeline for Azure deployment
 
 variables:
-- group: terraspacekeys
+- group: Keyvault
 
 trigger:
   branches:
     include:
-    - newOne
+    - main
   paths:
     include:
     - terraform/projetos/stacks/backend
