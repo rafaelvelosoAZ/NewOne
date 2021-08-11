@@ -1,0 +1,220 @@
+# Azure DevOps pipeline for Azure deployment
+
+variables:
+- group: Keyvault
+
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - terraform/projetos/stacks/backend
+
+stages:
+- stage: Validate
+  displayName: Validate
+  jobs:
+  - job: validate
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    # Install Checkov
+    - bash: pip3 install checkov
+      displayName: 'Install checkov'
+      name: 'install_checkov'
+
+    # Azure key-new-one Vault
+    # Download Azure key-new-one Vault secrets
+    - task: AzurekeyVault@1
+      inputs:
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraform-keys-tf'
+        SecretsFilter: '*'
+        RunAsPreJob: false
+    
+    # Init
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      env:
+        ARM_SAS_TOKEN: $(sas-token-dev)
+      inputs:
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key-newone)'
+        backendType: 'selfConfigured'
+
+  # Validate
+    - task: TerraformCLI@0
+      displayName: Validate Config
+      inputs:
+        command: 'validate'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+
+  # Verify module files with Checkov
+    - bash: checkov --directory $(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend/.terraform --skip-check CKV_DOCKER_* -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Module-Report.xml
+      displayName: 'Verify modules with Checkov'
+      name: 'checkov_module_check'
+
+  # Publish test results for modules
+  # Shout out to Adin Ermie for this one! https://adinermie.com/publishing-checkov-terraform-quality-checks-to-azure-devops-pipelines/
+    - task: PublishTestResults@2
+      displayName: Publish Checkov Module Test Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/*Checkov-Module-Report.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        mergeTestResults: false
+        testRunTitle: Checkov Module Scan
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+  # Verify main files with Checkov
+    - bash: checkov --directory $(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Root-Report.xml
+      displayName: 'Verify root module with Checkov'
+      name: 'checkov_root_check'
+
+  # Publish test results for root module
+    - task: PublishTestResults@2
+      displayName: Publish Checkov Root Test Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/*Checkov-Root-Report.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        mergeTestResults: false
+        testRunTitle: Checkov Root Scan
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+    
+- stage: Plan
+  displayName: Plan
+  jobs:
+  - job: plan
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    # Install Checkov
+    - bash: pip3 install checkov
+      displayName: 'Install checkov'
+      name: 'install_checkov'
+
+    # Azure key-new-one Vault
+    # Download Azure key-new-one Vault secrets
+    - task: AzurekeyVault@1
+      inputs:
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraform-keys-tf'
+        SecretsFilter: '*'
+        RunAsPreJob: false
+  
+    # Init
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      env:
+        ARM_SAS_TOKEN: $(sas-token-dev)
+      inputs:
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key-newone)'
+        backendType: 'selfConfigured'
+
+
+  # Plan
+    - task: TerraformCLI@0
+      displayName: Plan Terraform Deployment
+      env:
+        ARM_SAS_TOKEN: $(sas-token-dev)
+        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
+        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
+        ARM_SUBSCRIPTION_ID: $(ARM-SUBSCRIPTION-ID)
+        ARM_TENANT_ID: $(ARM-TENANT-ID)
+      inputs:
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend/main.tfplan'
+        publishPlanResults: 'Terraform Plan'
+
+  # Verify plan with Checkov
+    - bash: |
+        cd $(System.DefaultWorkingDirectory)/contoso/app/stacks/backend
+        ls
+        terraform show -json main.tfplan > $(System.DefaultWorkingDirectory)/main.json
+        checkov -f $(System.DefaultWorkingDirectory)/main.json -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Plan-Report.xml
+      displayName: 'Verify plan with Checkov'
+      name: 'checkov_plan_check'
+      env:
+        ARM_SAS_TOKEN: $(sas-token-dev)
+        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
+        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
+        ARM_SUBSCRIPTION_ID: $(ARM-SUBSCRIPTION-ID)
+        ARM_TENANT_ID: $(ARM-TENANT-ID)
+  # Publish test results for plan
+    - task: PublishTestResults@2
+      displayName: Publish Checkov Plan Test Results
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: '**/*Checkov-Plan-Report.xml'
+        searchFolder: '$(System.DefaultWorkingDirectory)'
+        mergeTestResults: false
+        testRunTitle: Checkov Plan Scan
+        failTaskOnFailedTests: false
+        publishRunAttachments: true
+
+# Approve
+- stage: Approve
+  displayName: Approve
+  jobs:
+  - job: approve
+    displayName: Wait for approval
+    pool: server
+    steps: 
+    - task: ManualValidation@0
+      timeoutInMinutes: 60
+      inputs:
+        notifyUsers: 'rafa.v_s@hotmail.com'
+        instructions: 'Review the plan in the next hour'
+
+- stage: Apply
+  displayName: Apply
+  jobs:
+  - job: apply
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+
+    # Azure key-new-one Vault
+    # Download Azure key-new-one Vault secrets
+    - task: AzurekeyVault@1
+      inputs:
+        azureSubscription: 'service-key-vault'
+        KeyVaultName: 'terraform-keys-tf'
+        SecretsFilter: '*'
+        RunAsPreJob: false
+
+  # Init
+    - task: TerraformCLI@0
+      displayName: Initialize Terraform
+      env:
+        ARM_SAS_TOKEN: $(sas-token-dev)
+      inputs:
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key-newone)'
+        backendType: 'selfConfigured'
+
+  # Apply
+    - task: TerraformCLI@0
+      displayName: Apply Terraform Deployment
+      env:
+        ARM_SAS_TOKEN: $(sas-token-dev)
+        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
+        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
+        ARM_SUBSCRIPTION_ID: $(ARM-SUBSCRIPTION-ID)
+        ARM_TENANT_ID: $(ARM-TENANT-ID)
+      inputs:
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key-newone) -auto-approve'
