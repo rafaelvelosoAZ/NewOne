@@ -1,7 +1,7 @@
 # Azure DevOps pipeline for Azure deployment
 
 variables:
-- group: Keyvault
+- group: newone-key-vault
 
 trigger:
   branches:
@@ -26,10 +26,10 @@ stages:
 
     # Azure key-new-one Vault
     # Download Azure key-new-one Vault secrets
-    - task: AzurekeyVault@1
+    - task: AzureKeyVault@2
       inputs:
-        azureSubscription: 'service-key-vault'
-        KeyVaultName: 'terraform-keys-tf'
+        azureSubscription: 'newoneKeyvault'
+        KeyVaultName: 'newonekeyvault'
         SecretsFilter: '*'
         RunAsPreJob: false
     
@@ -37,11 +37,11 @@ stages:
     - task: TerraformCLI@0
       displayName: Initialize Terraform
       env:
-        ARM_SAS_TOKEN: $(sas-token-dev)
+        ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key-newone)'
+        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
         backendType: 'selfConfigured'
 
   # Validate
@@ -102,10 +102,10 @@ stages:
 
     # Azure key-new-one Vault
     # Download Azure key-new-one Vault secrets
-    - task: AzurekeyVault@1
+    - task: AzureKeyVault@2
       inputs:
-        azureSubscription: 'service-key-vault'
-        KeyVaultName: 'terraform-keys-tf'
+        azureSubscription: 'newoneKeyvault'
+        KeyVaultName: 'newonekeyvault'
         SecretsFilter: '*'
         RunAsPreJob: false
   
@@ -113,11 +113,11 @@ stages:
     - task: TerraformCLI@0
       displayName: Initialize Terraform
       env:
-        ARM_SAS_TOKEN: $(sas-token-dev)
+        ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key-newone)'
+        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
         backendType: 'selfConfigured'
 
 
@@ -125,11 +125,11 @@ stages:
     - task: TerraformCLI@0
       displayName: Plan Terraform Deployment
       env:
-        ARM_SAS_TOKEN: $(sas-token-dev)
-        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
-        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
-        ARM_SUBSCRIPTION_ID: $(ARM-SUBSCRIPTION-ID)
-        ARM_TENANT_ID: $(ARM-TENANT-ID)
+        ARM_SAS_TOKEN: $(sas-key)
+        ARM_CLIENT_ID: $(app-id)
+        ARM_CLIENT_SECRET: $(password-sp)
+        ARM_SUBSCRIPTION_ID: $(sb-id)
+        ARM_TENANT_ID: $(tenant-id)
       inputs:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
@@ -145,11 +145,11 @@ stages:
       displayName: 'Verify plan with Checkov'
       name: 'checkov_plan_check'
       env:
-        ARM_SAS_TOKEN: $(sas-token-dev)
-        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
-        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
-        ARM_SUBSCRIPTION_ID: $(ARM-SUBSCRIPTION-ID)
-        ARM_TENANT_ID: $(ARM-TENANT-ID)
+        ARM_SAS_TOKEN: $(sas-key)
+        ARM_CLIENT_ID: $(app-id)
+        ARM_CLIENT_SECRET: $(password-sp)
+        ARM_SUBSCRIPTION_ID: $(sb-id)
+        ARM_TENANT_ID: $(tenant-id)
   # Publish test results for plan
     - task: PublishTestResults@2
       displayName: Publish Checkov Plan Test Results
@@ -187,10 +187,10 @@ stages:
 
     # Azure key-new-one Vault
     # Download Azure key-new-one Vault secrets
-    - task: AzurekeyVault@1
+    - task: AzureKeyVault@2
       inputs:
-        azureSubscription: 'service-key-vault'
-        KeyVaultName: 'terraform-keys-tf'
+        azureSubscription: 'newoneKeyvault'
+        KeyVaultName: 'newonekeyvault'
         SecretsFilter: '*'
         RunAsPreJob: false
 
@@ -198,23 +198,23 @@ stages:
     - task: TerraformCLI@0
       displayName: Initialize Terraform
       env:
-        ARM_SAS_TOKEN: $(sas-token-dev)
+        ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key-newone)'
+        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
         backendType: 'selfConfigured'
 
   # Apply
     - task: TerraformCLI@0
       displayName: Apply Terraform Deployment
       env:
-        ARM_SAS_TOKEN: $(sas-token-dev)
-        ARM_CLIENT_ID: $(ARM-CLIENT-ID)
-        ARM_CLIENT_SECRET: $(ARM-CLIENT-SECRET)
-        ARM_SUBSCRIPTION_ID: $(ARM-SUBSCRIPTION-ID)
-        ARM_TENANT_ID: $(ARM-TENANT-ID)
+        ARM_SAS_TOKEN: $(sas-key)
+        ARM_CLIENT_ID: $(app-id)
+        ARM_CLIENT_SECRET: $(password-sp)
+        ARM_SUBSCRIPTION_ID: $(sb-id)
+        ARM_TENANT_ID: $(tenant-id)
       inputs:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storageaccount-dev-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key-newone) -auto-approve'
+        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key) -auto-approve'
