@@ -9,7 +9,7 @@ trigger:
     - main
   paths:
     include:
-    - terraform/projetos/stacks/backend
+    - backend
 
 stages:
 - stage: Validate
