@@ -40,7 +40,7 @@ stages:
         ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
         commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
         backendType: 'selfConfigured'
 
@@ -49,7 +49,7 @@ stages:
       displayName: Validate Config
       inputs:
         command: 'validate'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
 
   # Verify module files with Checkov
     - bash: checkov --directory $(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend/.terraform --skip-check CKV_DOCKER_* -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Module-Report.xml
@@ -116,7 +116,7 @@ stages:
         ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
         commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
         backendType: 'selfConfigured'
 
@@ -132,7 +132,7 @@ stages:
         ARM_TENANT_ID: $(tenant-id)
       inputs:
         command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
         commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend/main.tfplan'
         publishPlanResults: 'Terraform Plan'
 
@@ -201,7 +201,7 @@ stages:
         ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
         commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
         backendType: 'selfConfigured'
 
@@ -216,5 +216,5 @@ stages:
         ARM_TENANT_ID: $(tenant-id)
       inputs:
         command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
         commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key) -auto-approve'
