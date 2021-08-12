@@ -140,12 +140,6 @@ stages:
   # Plan
     - task: TerraformTaskV2@2
       displayName: Plan Terraform Deployment
-      env:
-        ARM_SAS_TOKEN: $(sas-key)
-        ARM_CLIENT_ID: $(app-id)
-        ARM_CLIENT_SECRET: $(password-sp)
-        ARM_SUBSCRIPTION_ID: $(sb-id)
-        ARM_TENANT_ID: $(tenant-id)
       inputs:
         provider: 'azurerm'
         command: 'plan'
