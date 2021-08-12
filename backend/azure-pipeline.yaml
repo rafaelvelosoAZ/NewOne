@@ -34,15 +34,16 @@ stages:
         RunAsPreJob: false
     
     # Init
-    - task: TerraformCLI@0
-      displayName: Initialize Terraform
-      env:
-        ARM_SAS_TOKEN: $(sas-key)
+    - task: TerraformTaskV2@2
       inputs:
+        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
-        backendType: 'selfConfigured'
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestgs'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tf/terraform.tfstate'
 
   # Validate
     - task: TerraformCLI@0
@@ -110,16 +111,16 @@ stages:
         RunAsPreJob: false
   
     # Init
-    - task: TerraformCLI@0
-      displayName: Initialize Terraform
-      env:
-        ARM_SAS_TOKEN: $(sas-key)
+    - task: TerraformTaskV2@2
       inputs:
+        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
-        backendType: 'selfConfigured'
-
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestgs'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tf/terraform.tfstate'
 
   # Plan
     - task: TerraformCLI@0
@@ -195,15 +196,16 @@ stages:
         RunAsPreJob: false
 
   # Init
-    - task: TerraformCLI@0
-      displayName: Initialize Terraform
-      env:
-        ARM_SAS_TOKEN: $(sas-key)
+    - task: TerraformTaskV2@2
       inputs:
+        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
-        backendType: 'selfConfigured'
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestgs'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tf/terraform.tfstate'
 
   # Apply
     - task: TerraformCLI@0
