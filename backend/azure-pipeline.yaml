@@ -54,7 +54,7 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
 
   # Verify module files with Checkov
-    - bash: checkov --directory $(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend/.terraform --skip-check CKV_DOCKER_* -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Module-Report.xml
+    - bash: checkov --directory $(System.DefaultWorkingDirectory)/backend/.terraform --skip-check CKV_DOCKER_* -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Module-Report.xml
       displayName: 'Verify modules with Checkov'
       name: 'checkov_module_check'
 
@@ -73,7 +73,7 @@ stages:
         publishRunAttachments: true
 
   # Verify main files with Checkov
-    - bash: checkov --directory $(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Root-Report.xml
+    - bash: checkov --directory $(System.DefaultWorkingDirectory)/backend -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Root-Report.xml
       displayName: 'Verify root module with Checkov'
       name: 'checkov_root_check'
 
