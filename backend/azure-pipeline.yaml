@@ -126,6 +126,19 @@ stages:
 
   # Plan
     - task: TerraformTaskV2@2
+      displayName: Validate Config
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestgs'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tf/terraform.tfstate'
+
+  # Plan
+    - task: TerraformTaskV2@2
       displayName: Plan Terraform Deployment
       env:
         ARM_SAS_TOKEN: $(sas-key)
@@ -133,12 +146,12 @@ stages:
         ARM_CLIENT_SECRET: $(password-sp)
         ARM_SUBSCRIPTION_ID: $(sb-id)
         ARM_TENANT_ID: $(tenant-id)
-        inputs:
-          provider: 'azurerm'
-          command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-          commandOptions: '-out=$(System.DefaultWorkingDirectory)/backend/main.tfplan'
-          environmentServiceNameAzureRM: 'newoneKeyvault'
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
+        commandOptions: '-out=$(System.DefaultWorkingDirectory)/backend/main.tfplan'
+        environmentServiceNameAzureRM: 'newoneKeyvault'
 
   # Verify plan with Checkov
     - bash: |
