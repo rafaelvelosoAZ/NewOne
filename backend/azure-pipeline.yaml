@@ -40,9 +40,14 @@ stages:
         ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
-        backendType: 'selfConfigured'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'''
+        backendType: 'azurerm'
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestg'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tfstate'
+        allowTelemetryCollection: true
 
   # Validate
     - task: TerraformCLI@0
@@ -116,9 +121,14 @@ stages:
         ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
-        backendType: 'selfConfigured'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'''
+        backendType: 'azurerm'
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestg'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tfstate'
+        allowTelemetryCollection: true
 
 
   # Plan
@@ -201,9 +211,14 @@ stages:
         ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key)'
-        backendType: 'selfConfigured'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'''
+        backendType: 'azurerm'
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestg'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tfstate'
+        allowTelemetryCollection: true
 
   # Apply
     - task: TerraformCLI@0
