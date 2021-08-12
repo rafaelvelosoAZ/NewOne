@@ -36,8 +36,6 @@ stages:
     # Init
     - task: TerraformCLI@0
       displayName: Initialize Terraform
-      env:
-        ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
@@ -117,8 +115,6 @@ stages:
     # Init
     - task: TerraformCLI@0
       displayName: Initialize Terraform
-      env:
-        ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
@@ -207,8 +203,6 @@ stages:
   # Init
     - task: TerraformCLI@0
       displayName: Initialize Terraform
-      env:
-        ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
