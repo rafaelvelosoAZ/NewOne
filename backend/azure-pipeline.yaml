@@ -138,15 +138,16 @@ stages:
         backendAzureRmKey: 'tf/terraform.tfstate'
 
   # Plan
-    - task: TerraformTaskV2@2
-      displayName: Plan Terraform Deployment
+    - task: TerraformCLI@0
       inputs:
-        provider: 'azurerm'
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
+        environmentServiceName: 'newoneKeyvault'
         commandOptions: '-out=$(System.DefaultWorkingDirectory)/backend/main.tfplan'
+        allowTelemetryCollection: true
         publishPlanResults: 'Terraform Plan'
-        environmentServiceNameAzureRM: 'newoneKeyvault'
+
+
 
   # Verify plan with Checkov
     - bash: |
