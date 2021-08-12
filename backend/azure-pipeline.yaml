@@ -216,12 +216,6 @@ stages:
   # Apply
     - task: TerraformCLI@0
       displayName: Apply Terraform Deployment
-      env:
-        ARM_SAS_TOKEN: $(sas-key)
-        ARM_CLIENT_ID: $(app-id)
-        ARM_CLIENT_SECRET: $(password-sp)
-        ARM_SUBSCRIPTION_ID: $(sb-id)
-        ARM_TENANT_ID: $(tenant-id)
       inputs:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
