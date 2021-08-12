@@ -34,13 +34,16 @@ stages:
         RunAsPreJob: false
     
     # Init
-    - task: TerraformCLI@0
-      displayName: Initialize Terraform
+    - task: TerraformTaskV2@2
       inputs:
+        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        backendType: 'selfConfigured'
-        allowTelemetryCollection: true
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestgs'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tf/terraform.tfstate'
 
   # Validate
     - task: TerraformCLI@0
@@ -108,14 +111,16 @@ stages:
         RunAsPreJob: false
   
     # Init
-    - task: TerraformCLI@0
-      displayName: Initialize Terraform
+    - task: TerraformTaskV2@2
       inputs:
+        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        backendType: 'selfConfigured'
-        allowTelemetryCollection: true
-
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestgs'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tf/terraform.tfstate'
 
   # Plan
     - task: TerraformCLI@0
@@ -191,13 +196,16 @@ stages:
         RunAsPreJob: false
 
   # Init
-    - task: TerraformCLI@0
-      displayName: Initialize Terraform
+    - task: TerraformTaskV2@2
       inputs:
+        provider: 'azurerm'
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        backendType: 'selfConfigured'
-        allowTelemetryCollection: true
+        backendServiceArm: 'newoneKeyvault'
+        backendAzureRmResourceGroupName: 'newone'
+        backendAzureRmStorageAccountName: 'newonestgs'
+        backendAzureRmContainerName: 'terraform-states'
+        backendAzureRmKey: 'tf/terraform.tfstate'
 
   # Apply
     - task: TerraformCLI@0
