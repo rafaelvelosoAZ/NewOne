@@ -229,4 +229,4 @@ stages:
       inputs:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        commandOptions: '-backend-config=storage_account_name=$(storage-account-name) -backend-config=container_name=$(container-name) -backend-config=key=$(key) -auto-approve'
+        commandOptions: '-auto-approve'
