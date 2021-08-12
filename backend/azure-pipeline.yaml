@@ -39,12 +39,7 @@ stages:
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        backendType: 'azurerm'
-        backendServiceArm: 'newoneKeyvault'
-        backendAzureRmResourceGroupName: 'newone'
-        backendAzureRmStorageAccountName: 'newonestg'
-        backendAzureRmContainerName: 'terraform-states'
-        backendAzureRmKey: 'tfstate'
+        backendType: 'selfConfigured'
         allowTelemetryCollection: true
 
   # Validate
@@ -118,12 +113,7 @@ stages:
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        backendType: 'azurerm'
-        backendServiceArm: 'newoneKeyvault'
-        backendAzureRmResourceGroupName: 'newone'
-        backendAzureRmStorageAccountName: 'newonestg'
-        backendAzureRmContainerName: 'terraform-states'
-        backendAzureRmKey: 'tfstate'
+        backendType: 'selfConfigured'
         allowTelemetryCollection: true
 
 
@@ -206,12 +196,7 @@ stages:
       inputs:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        backendType: 'azurerm'
-        backendServiceArm: 'newoneKeyvault'
-        backendAzureRmResourceGroupName: 'newone'
-        backendAzureRmStorageAccountName: 'newonestg'
-        backendAzureRmContainerName: 'terraform-states'
-        backendAzureRmKey: 'tfstate'
+        backendType: 'selfConfigured'
         allowTelemetryCollection: true
 
   # Apply
