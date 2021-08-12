@@ -184,15 +184,8 @@ stages:
         notifyUsers: 'rafa.v_s@hotmail.com'
         instructions: 'Review the plan in the next hour'
 
-- stage: PublishBuild
-  displayName: Publish Build
-  jobs:
-  - job: PublishBuild
-    displayName: PublishBuild
-    pool: server
-    steps:
     - task: PublishBuildArtifacts@1
       inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)/backend'
-            ArtifactName: 'drop'
-            publishLocation: 'Container'
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/backend'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
