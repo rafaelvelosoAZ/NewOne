@@ -35,6 +35,7 @@ stages:
     
     # Init
     - task: TerraformTaskV2@2
+      displayName: Init
       inputs:
         provider: 'azurerm'
         command: 'init'
@@ -112,6 +113,7 @@ stages:
   
     # Init
     - task: TerraformTaskV2@2
+      displayName: Validate Config
       inputs:
         provider: 'azurerm'
         command: 'init'
@@ -134,12 +136,12 @@ stages:
       inputs:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        commandOptions: '-out=$(System.DefaultWorkingDirectory)/terraform/projetos/stacks/backend/main.tfplan'
+        commandOptions: '-out=$(System.DefaultWorkingDirectory)/backend/main.tfplan'
         publishPlanResults: 'Terraform Plan'
 
   # Verify plan with Checkov
     - bash: |
-        cd $(System.DefaultWorkingDirectory)/contoso/app/stacks/backend
+        cd $(System.DefaultWorkingDirectory)/backend
         ls
         terraform show -json main.tfplan > $(System.DefaultWorkingDirectory)/main.json
         checkov -f $(System.DefaultWorkingDirectory)/main.json -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Plan-Report.xml
