@@ -155,12 +155,6 @@ stages:
         checkov -f $(System.DefaultWorkingDirectory)/main.json -o junitxml > $(System.DefaultWorkingDirectory)/Checkov-Plan-Report.xml
       displayName: 'Verify plan with Checkov'
       name: 'checkov_plan_check'
-      env:
-        ARM_SAS_TOKEN: $(sas-key)
-        ARM_CLIENT_ID: $(app-id)
-        ARM_CLIENT_SECRET: $(password-sp)
-        ARM_SUBSCRIPTION_ID: $(sb-id)
-        ARM_TENANT_ID: $(tenant-id)
   # Publish test results for plan
     - task: PublishTestResults@2
       displayName: Publish Checkov Plan Test Results
