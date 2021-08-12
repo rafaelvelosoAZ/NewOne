@@ -40,7 +40,7 @@ stages:
         ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'''
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
         backendType: 'azurerm'
         backendServiceArm: 'newoneKeyvault'
         backendAzureRmResourceGroupName: 'newone'
@@ -121,7 +121,7 @@ stages:
         ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'''
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
         backendType: 'azurerm'
         backendServiceArm: 'newoneKeyvault'
         backendAzureRmResourceGroupName: 'newone'
@@ -211,7 +211,7 @@ stages:
         ARM_SAS_TOKEN: $(sas-key)
       inputs:
         command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'''
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
         backendType: 'azurerm'
         backendServiceArm: 'newoneKeyvault'
         backendAzureRmResourceGroupName: 'newone'
