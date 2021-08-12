@@ -184,39 +184,15 @@ stages:
         notifyUsers: 'rafa.v_s@hotmail.com'
         instructions: 'Review the plan in the next hour'
 
-- stage: Apply
-  displayName: Apply
+- stage: PublishBuild
+  displayName: Publish Build
   jobs:
-  - job: apply
-    pool:
-      vmImage: ubuntu-latest
+  - job: PublishBuild
+    displayName: PublishBuild
+    pool: server
     steps:
-
-    # Azure key-new-one Vault
-    # Download Azure key-new-one Vault secrets
-    - task: AzureKeyVault@2
+    - task: PublishBuildArtifacts@1
       inputs:
-        azureSubscription: 'newoneKeyvault'
-        KeyVaultName: 'newonekeyvault'
-        SecretsFilter: '*'
-        RunAsPreJob: false
-
-  # Init
-    - task: TerraformTaskV2@2
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        backendServiceArm: 'newoneKeyvault'
-        backendAzureRmResourceGroupName: 'newone'
-        backendAzureRmStorageAccountName: 'newonestgs'
-        backendAzureRmContainerName: 'terraform-states'
-        backendAzureRmKey: 'tf/terraform.tfstate'
-
-  # Apply
-    - task: TerraformCLI@0
-      displayName: Apply Terraform Deployment
-      inputs:
-        command: 'apply'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
-        commandOptions: '-auto-approve'
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/backend'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
