@@ -45,6 +45,14 @@ stages:
         backendAzureRmStorageAccountName: 'newonestgs'
         backendAzureRmContainerName: 'terraform-states'
         backendAzureRmKey: 'tf/terraform.tfstate'
+    
+    #Terraform fmt
+    - task: TerraformCLI@0
+      displayName: Terraform fmt
+      inputs:
+        command: 'fmt'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
+        allowTelemetryCollection: true
 
   # Validate
     - task: TerraformCLI@0
@@ -169,17 +177,3 @@ stages:
         testRunTitle: Checkov Plan Scan
         failTaskOnFailedTests: false
         publishRunAttachments: true
-
-# Approve
-- stage: Approve
-  displayName: Approve
-  jobs:
-  - job: approve
-    displayName: Wait for approval
-    pool: server
-    steps: 
-    - task: ManualValidation@0
-      timeoutInMinutes: 60
-      inputs:
-        notifyUsers: 'rafa.v_s@hotmail.com'
-        instructions: 'Review the plan in the next hour'
