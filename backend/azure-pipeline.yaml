@@ -183,9 +183,3 @@ stages:
       inputs:
         notifyUsers: 'rafa.v_s@hotmail.com'
         instructions: 'Review the plan in the next hour'
-
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/backend'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
